@@ -2,6 +2,8 @@
 
 import random, string
 
+import time
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -65,5 +67,9 @@ for url in urls:
     driver.find_element_by_css_selector("label[for='readingmode-checkbox']").click()
     driver.find_element_by_css_selector("form[action='/']").submit()
 
-    for element in driver.find_elements_by_class("col-sm-12"):
+    # Need to be here to allow the page to load properly
+    time.sleep(1)
+
+    print(len(driver.find_elements_by_class_name("col-sm-12")))
+    print("Limiting the number of articles work") if len(driver.find_elements_by_class_name("col-sm-12")) == limitNumber else exit()
 
