@@ -2,6 +2,12 @@
 
 import random, string
 
+# Used for locating the details in the article description fields
+import re
+
+# Used for verifying that the feed properly sorts by date
+from datetime import datetime, timezone
+
 import time
 
 from selenium import webdriver
@@ -73,3 +79,24 @@ for url in urls:
     print(len(driver.find_elements_by_class_name("col-sm-12")))
     print("Limiting the number of articles work") if len(driver.find_elements_by_class_name("col-sm-12")) == limitNumber else exit()
 
+    DetailPatterns = {
+            "publisher":    re.compile(r'(?<=Publisher: )\w*'),
+            "publishDate":  re.compile(r'(?<=Published: ).*')
+            }
+
+
+    print(f"Verifying {limitNumber} elements")
+    lastTime = datetime.now(timezone.utc).astimezone()
+    for i in range(len(driver.find_elements_by_class_name("col-sm-12"))):
+        print(i, end=" ")
+
+        currentElementDesc = driver.find_elements_by_class_name("source")[i].text
+        currentPublisher = DetailPatterns['publisher'].search(currentElementDesc).group(0)
+        currentTime = datetime.strptime(DetailPatterns['publishDate'].search(currentElementDesc).group(0), '%Y-%m-%d %H:%M:%S%z')
+
+        if currentPublisher not in profiles: print("\nPublisher-check failed"); exit()
+        if currentTime > lastTime: print("\nDate-check failed"); exit()
+        lastTime = currentTime
+
+    print("\nLimiting sources work")
+    print("Sorts properly by date")
