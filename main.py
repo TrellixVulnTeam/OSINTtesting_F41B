@@ -13,13 +13,13 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-#urls = input("Enter comma-seperated list of ip/domain names: ").split(",")
-urls = ["localhost:5000"]
+urls = input("Enter comma-seperated list of ip/domain names: ").split(",")
 
 username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
 password = "Testpassword"
-limitNumber = 5
-profiles = ["bleepingcomputer", "zdnet"]
+
+limitNumber = 20
+profiles = ["bleepingcomputer", "zdnet", "threatpost"]
 
 # Setting the options for running the browser driver headlessly so it doesn't pop up when running the script
 #driverOptions = Options()
