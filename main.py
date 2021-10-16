@@ -100,3 +100,15 @@ for url in urls:
 
     print("\nLimiting sources work")
     print("Sorts properly by date")
+
+    print(f"Verifying reading-mode of {limitNumber} elements")
+    for i,element in enumerate(driver.find_elements_by_class_name("col-sm-12")):
+        print(i, end=" ")
+
+        linkLocation = element.find_element_by_xpath("./child::a").get_attribute("href")
+
+        driver.get(linkLocation)
+        if len(driver.find_elements_by_css_selector("li")) < 4: print(f"Reading mode doesn't seem to render properly for {linkLocation}"); exit()
+        driver.back()
+
+    print("Reading mode works")
