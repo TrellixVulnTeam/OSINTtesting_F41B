@@ -61,7 +61,7 @@ for url in urls:
 
     driver.find_element_by_class_name("form-control").send_keys(Keys.CONTROL, "a")
     driver.find_element_by_class_name("form-control").send_keys(Keys.BACKSPACE)
-    driver.find_element_by_class_name("form-control").send_keys("2")
+    driver.find_element_by_class_name("form-control").send_keys(str(limitNumber))
     driver.find_element_by_css_selector("label[for='readingmode-checkbox']").click()
     driver.find_element_by_css_selector("form[action='/']").submit()
 
