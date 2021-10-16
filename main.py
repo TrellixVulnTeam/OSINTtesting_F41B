@@ -112,3 +112,7 @@ for url in urls:
         driver.back()
 
     print("Reading mode works")
+
+    driver.get(f"{url}/logout")
+
+    print("Logged out successfuly") if driver.find_elements_by_class_name("listview-item-checkbutton") == [] else exit()
