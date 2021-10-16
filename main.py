@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 #urls = input("Enter comma-seperated list of ip/domain names: ").split(",")
 urls = ["localhost:5000"]
 
-username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
 password = "Testpassword"
 limitNumber = 5
 profiles = ["bleepingcomputer", "zdnet"]
