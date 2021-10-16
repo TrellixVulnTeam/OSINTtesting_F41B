@@ -8,7 +8,15 @@ import re
 # Used for verifying that the feed properly sorts by date
 from datetime import datetime, timezone
 
+# For sleeping to allow page to load
 import time
+
+# Used for downloading the geckodriver
+import os
+import requests
+import json
+import tarfile
+
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -25,15 +33,19 @@ profiles = ["bleepingcomputer", "zdnet", "threatpost"]
 #driverOptions = Options()
 #driverOptions.headless = headless
 
-# Setup the webdriver with options
-profile = webdriver.FirefoxProfile()
-profile.set_preference("permissions.default.image", 2)
-driver = webdriver.Firefox(executable_path="./geckodriver", firefox_profile=profile)
+# Mozilla will have an api endpoint giving a lot of information about the latest releases for the geckodriver, from which the url for the linux 64 bit has to be extracted
+def extractDriverURL():
+    driverDetails = json.loads(requests.get("https://api.github.com/repos/mozilla/geckodriver/releases/latest").text)
 
+    for platformRelease in driverDetails['assets']:
+        if platformRelease['name'].endswith("linux64.tar.gz"):
+            return platformRelease['browser_download_url']
 
-for url in urls:
-    print(f"\n\n---\n\nTesting {url}\n\n--\n\n")
-    driver.get(url)
+# Downloading and extracting the .tar.gz file the geckodriver is stored in into the tools directory
+def downloadDriver(driverURL):
+    driverContents = requests.get(driverURL, stream=True)
+    with tarfile.open(fileobj=driverContents.raw, mode='r|gz') as driverFile:
+        driverFile.extractall()
 
     print("Page loads") if driver.find_element_by_id("links").is_enabled() else exit()
 
